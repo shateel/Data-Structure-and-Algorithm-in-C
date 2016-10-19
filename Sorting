@@ -1,0 +1,89 @@
+#include<stdio.h>
+
+int sort(int a[], int low, int high);
+int merge(int a[], int low, int mid, int high);
+
+int main(void)
+{
+    int size =6;
+    int i;
+    int a[] = {9,6,5,0,8,2};
+
+    sort(a, 0, size-1);
+
+    for(i=0; i<size; ++i)
+    {
+        printf("%3d", a[i]);
+    }
+    puts("");
+}
+
+int sort(int a[], int low, int high)
+{
+    int mid;
+
+    if(high<=low)
+    {
+        return;
+    }
+    else
+    {
+        mid = low + (high-low)/2;
+        sort(a, low, mid);
+        sort(a, mid+1, high);
+        merge(a, low, mid, high);
+    }
+}
+/*
+This method merges by first copying into the auxiliary array aux[]then merging back to a[]. In the
+merge (the second forloop), there are four conditions:
+1.left half exhausted (take from the right),
+2.right half exhausted (take from the left),
+3.current key on right less than current key on left (take from the right),
+4.current key on right greater than or equal to current key on left (take from the left).
+*/
+int merge(int a[], int low, int mid, int high)
+{
+    int i = low;
+    int j = mid+1;
+    int k; //counter
+    int aux[6];
+
+
+    for (k = low; k <= high; ++k){ // Copy a[lo..hi] to aux[lo..hi].
+        aux[k] = a[k];
+    }
+
+    for (k = low; k <= high; ++k){ // Merge back to a[lo..hi].
+
+        if (i > mid){   //if left half(i) exhausted (take from the right)
+            a[k] = aux[j];
+            j++;
+        }
+        else
+            if (j > high ){     //if right half(j) exhausted (take from the left)
+                a[k] = aux[i];
+                i++;
+            }
+        else
+            if ((aux[j]<aux[i])){
+                a[k] = aux[j];
+                j++;
+            }
+        else {
+            a[k] = aux[i];
+            i++;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
